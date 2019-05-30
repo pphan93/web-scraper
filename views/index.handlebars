@@ -1,0 +1,48 @@
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('assets/img/hacker2.jpg')">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="site-heading">
+          <h1>Hacker News</h1>
+          <span class="subheading">A place for all thing hacks</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-10 col-md-12 mx-auto">
+
+
+      {{#each found}}
+      <div class="post-preview">
+        <div class="row">
+        <div class="col-md-4"> <img class="post-img" src="{{img}}" alt="Smiley face" ></div>
+        <div class="col-md-8">
+          <a href="{{link}}">
+            <h2 class="post-title">
+              {{title}}
+            </h2>
+            <h3 class="post-subtitle">
+              {{desc}}
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            {{author}} on {{date}}</p>
+        </div>
+      </div>
+      </div>
+      <hr>
+      {{/each}}
+      <!-- Pager -->
+      <div class="clearfix">
+        <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+      </div>
+    </div>
+  </div>
+</div>
