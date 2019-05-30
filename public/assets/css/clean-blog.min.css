@@ -1,5 +1,5 @@
 /*!
- * Start Bootstrap - Clean Blog v5.0.5 (https://startbootstrap.com/template-overviews/clean-blog)
+ * Start Bootstrap - Clean Blog v5.0.6 (https://startbootstrap.com/template-overviews/clean-blog)
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-clean-blog/blob/master/LICENSE)
  */
@@ -61,10 +61,21 @@ blockquote {
     border-bottom-left-radius: 5px
 }
 
+::-moz-selection {
+    color: #fff;
+    background: #0085a1;
+    text-shadow: none
+}
+
 ::selection {
     color: #fff;
     background: #0085a1;
     text-shadow: none
+}
+
+img::-moz-selection {
+    color: #fff;
+    background: 0 0
 }
 
 img::selection {
@@ -197,7 +208,7 @@ header.masthead .overlay {
 header.masthead .page-heading,
 header.masthead .post-heading,
 header.masthead .site-heading {
-    padding: 200px 0 150px;
+    padding: 150px 0 150px;
     color: #fff
 }
 
@@ -206,7 +217,7 @@ header.masthead .site-heading {
     header.masthead .page-heading,
     header.masthead .post-heading,
     header.masthead .site-heading {
-        padding: 200px 0
+        padding: 150px 0
     }
 }
 
@@ -235,12 +246,16 @@ header.masthead .site-heading .subheading {
 
     header.masthead .page-heading h1,
     header.masthead .site-heading h1 {
-        font-size: 80px
+        font-size: 40px
     }
 }
 
 header.masthead .post-heading h1 {
     font-size: 35px
+}
+
+.index{
+    font-size: 80px !important
 }
 
 header.masthead .post-heading .meta,
@@ -269,7 +284,7 @@ header.masthead .post-heading .meta a {
 
 @media only screen and (min-width:768px) {
     header.masthead .post-heading h1 {
-        font-size: 55px
+        font-size: 45px
     }
 
     header.masthead .post-heading .subheading {
@@ -277,61 +292,51 @@ header.masthead .post-heading .meta a {
     }
 }
 
-.post-preview>div>div>a {
+.post-preview>a {
     color: #212529
 }
 
-.post-preview>div>div>a:focus,
-.post-preview>div>div>a:hover {
+.post-preview>a:focus,
+.post-preview>a:hover {
     text-decoration: none;
     color: #0085a1
 }
 
-.post-preview>div>div>a>.post-title {
-    font-size: 25px;
+.post-preview>a>.post-title {
+    font-size: 30px;
     margin-top: 30px;
     margin-bottom: 10px
 }
 
-.post-preview>div>div>a>.post-subtitle {
+.post-preview>a>.post-subtitle {
     font-weight: 300;
     margin: 0 0 10px
 }
 
-.post-preview>div>div>.post-meta {
+.post-preview>.post-meta {
     font-size: 18px;
     font-style: italic;
     margin-top: 0;
     color: #868e96
 }
 
-.post-preview>div>div>.post-meta>a {
+.post-preview>.post-meta>a {
     text-decoration: none;
     color: #212529
 }
 
-.post-preview>div>div>.post-meta>a:focus,
-.post-preview>div>div>.post-meta>a:hover {
+.post-preview>.post-meta>a:focus,
+.post-preview>.post-meta>a:hover {
     text-decoration: underline;
     color: #0085a1
 }
 
 @media only screen and (min-width:768px) {
-    .post-preview>div>div>a>.post-title {
-        font-size: 30px
+    .post-preview>a>.post-title {
+        font-size: 36px
     }
 }
 
-.post-img {
-    height: 200;
-    width: 100%;
-    margin-top: 30px;
-    margin-bottom: 10px
-}
-
-form .form-group:first-child .floating-label-form-group {
-    border-top: 1px solid #dee2e6
-}
 
 footer {
     padding: 50px 0 65px
@@ -374,4 +379,19 @@ footer .copyright {
 .btn-lg {
     font-size: 16px;
     padding: 25px 35px
+}
+
+.post-img {
+    height: 200;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 10px
+}
+
+
+
+.alert {
+    background-color: #0085a1;
+    border-color: #0085a1;
+    color: white;
 }

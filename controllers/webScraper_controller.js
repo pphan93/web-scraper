@@ -1,27 +1,37 @@
 var express = require("express");
 var router = express.Router();
 
-var mongojs = require("mongojs");
+// var mongojs = require("mongojs");
+var mongoose = require("mongoose");
 // Require axios and cheerio. This makes the scraping possible
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-// Database configuration
-var databaseUrl = "scraper";
-var collections = ["scrapedData"];
-
-
-// Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on("error", function (error) {
-    console.log("Database Error:", error);
+// Connect to the Mongo DB
+mongoose.connect("mongodb://localhost/populatedb", {
+    useNewUrlParser: true
 });
+
+// // Database configuration
+// var databaseUrl = "scraper";
+// var collections = ["scrapedData"];
+
+
+
+// Require all models
+var db = require("../models");
+
+// // Hook mongojs configuration to the db variable
+// var db = mongojs(databaseUrl, collections);
+// db.on("error", function (error) {
+//     console.log("Database Error:", error);
+// });
 
 // Main route (simple Hello World Message)
 router.get("/", function (req, res) {
     //console.log("hello")
     // Find all results from the scrapedData collection in the db
-    db.scrapedData.find(function (error, found) {
+    db.Article.find(function (error, found) {
         // Throw any errors to the console
         if (error) {
             console.log(error);
@@ -43,7 +53,7 @@ router.get("/", function (req, res) {
 // Retrieve data from the db
 router.get("/all", function (req, res) {
     // Find all results from the scrapedData collection in the db
-    db.scrapedData.find(function (error, found) {
+    db.Article.find(function (error, found) {
         // Throw any errors to the console
         if (error) {
             console.log(error);
@@ -54,6 +64,41 @@ router.get("/all", function (req, res) {
             res.json(found);
         }
     });
+});
+
+router.get("/:id", function (req, res) {
+
+    var postId = req.params.id;
+
+
+    db.Article.findById(postId, function (error, found) {
+
+        if (error) {
+            console.log(error);
+        }
+        // If there are no errors, send the data to the browser as json
+        else {
+            console.log(found)
+            //res.json(found);
+
+            var result = found
+
+            axios.get(result.link).then(function (response) {
+                // Load the html body from axios into cheerio
+                var $ = cheerio.load(response.data);
+                $("#articlebody").each(function (i, element) {
+                    console.log($(element).html())
+                    result.html = $(element).html()
+                    res.render("post",result
+                    )
+                });
+        
+            })
+        }
+    });
+
+
+
 });
 
 // Scrape data from one site and place it into the mongodb db
@@ -83,7 +128,7 @@ router.get("/scrape", function (req, res) {
             // If this found element had both a title and a link
             if (title && link) {
                 // Insert the data in the scrapedData db
-                db.scrapedData.insert({
+                db.Article.create({
                         title: title,
                         link: link,
                         img: img,
@@ -97,7 +142,7 @@ router.get("/scrape", function (req, res) {
                             console.log(err);
                         } else {
                             // Otherwise, log the inserted data
-                            //console.log(inserted);
+                            console.log(inserted);
                         }
                     });
             }
