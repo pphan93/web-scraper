@@ -31,7 +31,9 @@ var db = require("../models");
 router.get("/", function (req, res) {
     //console.log("hello")
     // Find all results from the scrapedData collection in the db
-    db.Article.find(function (error, found) {
+    db.Article.find({
+        saved: 0
+    }, function (error, found) {
         // Throw any errors to the console
         if (error) {
             console.log(error);
@@ -66,10 +68,51 @@ router.get("/all", function (req, res) {
     });
 });
 
-router.get("/:id", function (req, res) {
+router.post("/save", function (req, res) {
+    var postId = req.body.id
+    var condition = req.body.condition
+    console.log(postId)
 
-    var postId = req.params.id;
+    
+    db.Article.findByIdAndUpdate(postId, {
+        saved: condition
+    }, function (error, found) {
+        // Throw any errors to the console
+        if (error) {
+            console.log(error);
+        }
+        // If there are no errors, send the data to the browser as json
+        else {
+            console.log("hello")
+            res.redirect("/");
+        }
+    })
+})
 
+router.get("/saved", function(req,res) {
+    db.Article.find({
+        saved: 1
+    }, function (error, found) {
+        // Throw any errors to the console
+        if (error) {
+            console.log(error);
+        }
+        // If there are no errors, send the data to the browser as json
+        else {
+            //res.json(found);
+
+            //console.log(found)
+            res.render("index", {
+                found: found
+            });
+        }
+    });
+})
+
+router.get("/post", function (req, res) {
+
+    var postId = req.query.id;
+    console.log(postId)
 
     db.Article.findById(postId, function (error, found) {
 
@@ -89,10 +132,9 @@ router.get("/:id", function (req, res) {
                 $("#articlebody").each(function (i, element) {
                     console.log($(element).html())
                     result.html = $(element).html()
-                    res.render("post",result
-                    )
+                    res.render("post", result)
                 });
-        
+
             })
         }
     });
@@ -103,6 +145,7 @@ router.get("/:id", function (req, res) {
 
 // Scrape data from one site and place it into the mongodb db
 router.get("/scrape", function (req, res) {
+    console.log("test")
     axios.get("https://thehackernews.com/").then(function (response) {
         // Load the html body from axios into cheerio
         var $ = cheerio.load(response.data);
@@ -123,7 +166,7 @@ router.get("/scrape", function (req, res) {
                 .end() //again go back to selected element
                 .text();
 
-            //console.log(author)
+            console.log(author)
 
             // If this found element had both a title and a link
             if (title && link) {

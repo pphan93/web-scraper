@@ -7,7 +7,9 @@
         <div class="site-heading">
           <h1 class="index">Hacker News</h1>
           <span class="subheading">A place for all thing hacks</span>
+          {{#unless saved}}
           <a class="btn btn-primary mt-2" id="scrape" href="/scrape">Scrape</a>
+          {{/unless}}
         </div>
       </div>
     </div>
@@ -23,19 +25,30 @@
       {{#each found}}
       <div class="post-preview">
         <div class="row">
-          <div class="col-md-4"> <img class="post-img" src="{{img}}" alt="Smiley face"></div>
+          <div class="col-md-4">
+            <img class="post-img" src="{{img}}" alt="Smiley face">
+            {{#if saved}}
+            <a class="mt-2 saveArticle" id="unsave" href="#" data-id={{id}}><i class="fas fa-bookmark"></i>
+              Remove Saved Article</a>
+            {{else}}
+            <a class="mt-2 saveArticle" id="save" href="#" data-id={{id}}><i class="fas fa-bookmark"></i>
+              Save Article</a>
+            {{/if}}
+          </div>
           <div class="col-md-8">
-            <a href="/{{id}}">
+            <a class="postLink" data-id={{id}} href="/post">
               <h2 class="post-title">
                 {{title}}
               </h2>
-              </a>
-              <p class="post-subtitle">
-                {{desc}}
-              </p>
-            
+            </a>
+            <p class="post-subtitle">
+              {{desc}}
+            </p>
+
             <p class="post-meta">Posted by
               {{author}} on {{date}}</p>
+
+
           </div>
         </div>
       </div>
