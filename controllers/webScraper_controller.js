@@ -8,7 +8,8 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/populatedb", {
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/populatedb";
+mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true
 });
 

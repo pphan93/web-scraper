@@ -1,6 +1,6 @@
 // Dependencies
 var express = require("express");
-
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
@@ -26,6 +26,6 @@ var routes = require("./controllers/webScraper_controller.js");
 app.use(routes);
 
 // Listen on port 3000
-app.listen(3000, function() {
-  console.log("App running on port 3000!");
+app.listen(PORT, function() {
+  console.log("App running on port " = PORT);
 });
