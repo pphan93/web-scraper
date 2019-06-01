@@ -34,9 +34,15 @@
             <a class="mt-2 saveArticle" id="save" href="#" data-id={{id}}><i class="fas fa-bookmark"></i>
               Save Article</a>
             {{/if}}
+            </br>
+            <a class="mt-2"  href={{link}}><i class="fas fa-link"></i>
+              Original Link</a>
+              </br>
+            <a class="mt-2" href="/post?id={{id}}#comment" data-id={{id}}><i class="fas fa-comment-dots"></i>
+              Comments</a>
           </div>
           <div class="col-md-8">
-            <a class="postLink" data-id={{id}} href="/post">
+            <a class="postLink" data-id={{id}} href="/post?id={{id}}">
               <h2 class="post-title">
                 {{title}}
               </h2>

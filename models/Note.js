@@ -7,9 +7,14 @@ var Schema = mongoose.Schema;
 // This is similar to a Sequelize model
 var NoteSchema = new Schema({
   // `title` is of type String
-  title: String,
+  // title: String,
   // `body` is of type String
-  body: String
+  date: {
+    type: String,
+    default: () => new Date().toISOString().replace(/T/, " ").replace(/\..+/, '').replace(/\d\d:\d\d:\d\d/, '')
+  },
+  name: String,
+  comment: String
 });
 
 // This creates our model from the above schema, using mongoose's model method

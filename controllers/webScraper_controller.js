@@ -73,7 +73,7 @@ router.post("/save", function (req, res) {
     var condition = req.body.condition
     console.log(postId)
 
-    
+
     db.Article.findByIdAndUpdate(postId, {
         saved: condition
     }, function (error, found) {
@@ -89,7 +89,59 @@ router.post("/save", function (req, res) {
     })
 })
 
-router.get("/saved", function(req,res) {
+router.post("/comment", function (req, res) {
+    var postId = req.body.id
+    var comment = req.body.comment
+    var name = req.body.name
+
+    console.log(postId)
+
+    db.Note.create({
+            name: name,
+            comment: comment
+        })
+        //console.log("test")
+        .then(function (dbNote) {
+            console.log(dbNote)
+            // If a Note was created successfully, find one User (there's only one) and push the new Note's _id to the User's `notes` array
+            // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+            // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+            return db.Article.findOneAndUpdate({
+                _id: postId
+            }, {
+                $push: {
+                    comments: dbNote._id
+                }
+            }, {
+                new: true
+            });
+        })
+        .then(function (dbArticle) {
+            // If the User was updated successfully, send it back to the client
+            //console.log(dbArticle._id)
+
+            db.Article.findOne({
+                    _id: dbArticle._id
+                })
+                // Specify that we want to populate the retrieved users with any associated notes
+                .populate("comments")
+                .then(function (dbArticle) {
+                    // If able to successfully find and associate all Users and Notes, send them back to the client
+                    res.json(dbArticle);
+                })
+                .catch(function (err) {
+                    // If an error occurs, send it back to the client
+                    res.json(err);
+                });
+        })
+        .catch(function (err) {
+            // If an error occurs, send it back to the client
+            console.log(err)
+            res.json(err);
+        });
+})
+
+router.get("/saved", function (req, res) {
     db.Article.find({
         saved: 1
     }, function (error, found) {
@@ -112,32 +164,60 @@ router.get("/saved", function(req,res) {
 router.get("/post", function (req, res) {
 
     var postId = req.query.id;
-    console.log(postId)
+    //console.log(postId)
 
-    db.Article.findById(postId, function (error, found) {
+    db.Article.findOne({
+            _id: postId
+        })
+        // Specify that we want to populate the retrieved users with any associated notes
+        .populate("comments")
+        .then(function (result) {
+            // If able to successfully find and associate all Users and Notes, send them back to the client
+            //res.json(dbArticle);
 
-        if (error) {
-            console.log(error);
-        }
-        // If there are no errors, send the data to the browser as json
-        else {
-            console.log(found)
-            //res.json(found);
-
-            var result = found
+console.log(result)
 
             axios.get(result.link).then(function (response) {
                 // Load the html body from axios into cheerio
                 var $ = cheerio.load(response.data);
                 $("#articlebody").each(function (i, element) {
-                    console.log($(element).html())
+                    //console.log($(element).html())
                     result.html = $(element).html()
                     res.render("post", result)
                 });
 
             })
-        }
-    });
+        })
+        .catch(function (err) {
+            // If an error occurs, send it back to the client
+            res.json(err);
+        });
+
+
+    // db.Article.findById(postId, function (error, found) {
+
+    //     if (error) {
+    //         console.log(error);
+    //     }
+    //     // If there are no errors, send the data to the browser as json
+    //     else {
+    //         console.log(found)
+    //         //res.json(found);
+
+    //         var result = found
+
+    //         axios.get(result.link).then(function (response) {
+    //             // Load the html body from axios into cheerio
+    //             var $ = cheerio.load(response.data);
+    //             $("#articlebody").each(function (i, element) {
+    //                 //console.log($(element).html())
+    //                 result.html = $(element).html()
+    //                 res.render("post", result)
+    //             });
+
+    //         })
+    //     }
+    // });
 
 
 

@@ -395,3 +395,20 @@ footer .copyright {
     border-color: #0085a1;
     color: white;
 }
+
+li.ui-state-default{
+    background:#fff0;
+    border:none;
+    border-bottom:1px solid #ddd;
+    text-align: left;
+    padding-bottom: 10px;
+}
+
+li.ui-state-default:last-child{
+    border-bottom:none;
+}
+
+p.post-meta {
+    margin:0px !important;
+
+}

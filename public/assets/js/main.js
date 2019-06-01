@@ -13,24 +13,73 @@ $("a#scrape").click(function (e) {
         });
 });
 
-$("a.postLink").click(function (e) {
+$("#comment").click(function (e) {
     e.preventDefault();
     // write your code
-    //console.log($(this).data("id"))
+    console.log("test")
 
-    var id = $(this).data("id")
+    console.log($("textarea#commentArea").val())
 
 
-
-    // Create an object for the user"s data
     var userData = {
-        id: $(this).data("id")
-    };
+        id: $(this).data("id"),
+        comment: $("textarea#commentArea").val(),
+        name: $("#name").val()
+    }
 
-    console.log(userData)
+    $.post(
+        "/comment", userData,
+        function (data) {
+            console.log(data)
+            var comments = data.comments
 
-    window.location=("/post?id="+id);
+            var commentSection = $("#commentSection")
+            commentSection.empty();
+            var html;
+
+            for (var i = 0; i < comments.length; i++) {
+                var currComment = comments[i].comment
+                var date = new Date(comments[i].date).toISOString().replace(/T/, " ").replace(/\..+/, '').replace(/\d\d:\d\d:\d\d/, '')
+                var name = comments[i].name
+                var id = comments[i]._id
+                html = '</br><strong class="pull-left primary-font">' + name + '</strong> <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span>'
+                html = html + date+ '<a class="removeComment float-right" href="#" data-id='+ id + '><i class="fas fa-times"></i></a></small>'+ '</small></br><li class="ui-state-default">' + currComment
+                html = html + '</li>'
+                commentSection.append(html)
+
+
+
+                // </br>
+                // <strong class="pull-left primary-font">James</strong>
+                // <small class="pull-right text-muted">
+                //     <span class="glyphicon glyphicon-time"></span>7 mins ago</small>
+                // </br>
+                // <li class="ui-state-default">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                //     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                //     exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </li>
+
+            }
+        });
 });
+
+// $("a.postLink").click(function (e) {
+//     e.preventDefault();
+//     // write your code
+//     //console.log($(this).data("id"))
+
+//     var id = $(this).data("id")
+
+
+
+//     // Create an object for the user"s data
+//     var userData = {
+//         id: $(this).data("id")
+//     };
+
+//     console.log(userData)
+
+//     window.location = ("/post?id=" + id +"#comment");
+// });
 
 $("a.saveArticle").click(function (e) {
     e.preventDefault();
@@ -46,14 +95,14 @@ $("a.saveArticle").click(function (e) {
 
     if (condition === "save") {
         userData.condition = 1
-        $.post("/save",userData, function(data) {
+        $.post("/save", userData, function (data) {
             window.location.replace("/");
-        }) 
+        })
     } else {
         userData.condition = 0
-        $.post("/save",userData, function(data) {
+        $.post("/save", userData, function (data) {
             window.location.replace("/saved");
-        }) 
+        })
     }
 
 
